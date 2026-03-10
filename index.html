@@ -1,1 +1,91 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фізика 10 клас | Кабінет фізики 229</title>
+    <style>
+        body {
+            font-family: "Cambria", "Times New Roman", serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fcfcfc;
+        }
+        h1 {
+            text-align: center;
+            font-weight: normal;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+        }
+        .work-container {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            background: white;
+        }
+        .work-title {
+            font-size: 1.1em;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .links-grid {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-left: 20px;
+        }
+        a {
+            color: #0056b3;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .appendix-section {
+            margin-top: 40px;
+            border-top: 2px solid #eee;
+            padding-top: 20px;
+        }
+        .unit {
+            font-style: normal;
+        }
+    </style>
+</head>
+<body>
 
+    <h1>Фізика 10 клас</h1>
+
+    <div id="experimental-works">
+        <script>
+            const container = document.getElementById('experimental-works');
+            for (let i = 1; i <= 9; i++) {
+                const section = document.createElement('div');
+                section.className = 'work-container';
+                section.innerHTML = `
+                    <span class="work-title">Експериментальна робота №${i}</span>
+                    <div class="links-grid">
+                        <a href="work${i}/instruction.html">Інструкція</a>
+                        <a href="work${i}/variants.html">Варіанти даних</a>
+                        <a href="work${i}/verification.html">Перевірка</a>
+                    </div>
+                `;
+                container.appendChild(section);
+            }
+        </script>
+    </div>
+
+    <div class="appendix-section">
+        <span class="work-title">Додатки</span>
+        <div class="links-grid">
+            <a href="appendices/app1.html">Додаток 1</a>
+            <a href="appendices/app2.html">Додаток 2</a>
+            <a href="appendices/app3.html">Додаток 3</a>
+        </div>
+    </div>
+
+</body>
+</html>
