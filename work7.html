@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Експериментальна робота №7 - Повний зошит</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 1000px; margin: 0 auto; padding: 20px; background-color: #fcfcfc; }
+        .paper { background: white; padding: 60px; box-shadow: 0 0 20px rgba(0,0,0,0.1); border-radius: 2px; position: relative; width: 100%; box-sizing: border-box; }
+        
+        h1 { color: #2c3e50; text-align: center; text-transform: uppercase; border-bottom: 2px solid #2c3e50; padding-bottom: 10px; margin-bottom: 30px; font-size: 1.6em; }
+        h2 { color: #2980b9; border-left: 5px solid #2980b9; padding-left: 15px; margin-top: 30px; font-size: 1.4em; }
+        h3.section-title { text-align: center; color: #2c3e50; text-transform: uppercase; margin-top: 40px; margin-bottom: 20px; font-size: 1.3em; letter-spacing: 1px; }
+        
+        .student-header { display: grid; grid-template-columns: 1.5fr 0.8fr 0.7fr; gap: 20px; background: #fafafa; border: 1px solid #ddd; padding: 20px; border-radius: 4px; margin-bottom: 30px; }
+        .input-group { display: flex; align-items: center; gap: 10px; }
+        .input-group input { border: none; border-bottom: 1px solid #777; padding: 5px; flex-grow: 1; outline: none; background: transparent; font-size: 1em; }
+
+        .full-width-box { width: 100%; background: #fdfdfd; padding: 25px; border-radius: 4px; border: 1px solid #e0e0e0; margin: 20px 0; box-sizing: border-box; }
+        
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; background: white; font-size: 0.85em; }
+        th, td { border: 1px solid #333; padding: 6px; text-align: center; }
+        th { background-color: #f8f9fa; }
+        
+        input[type="number"] { width: 90%; padding: 4px; border: 1px solid #3498db; border-radius: 3px; text-align: center; font-size: 1em; }
+        
+        input.correct { color: #27ae60 !important; font-weight: bold; border-color: #27ae60 !important; background-color: #fafffa; }
+        input.wrong { color: #e74c3c !important; font-weight: bold; border-color: #e74c3c !important; background-color: #fffafb; }
+
+        textarea { width: 100%; min-height: 80px; padding: 15px; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; margin-top: 10px; box-sizing: border-box; resize: vertical; line-height: 1.5; font-size: 1em; margin-bottom: 15px; }
+
+        .calculation-box { width: 100%; background: #fffcf5; border: 1px solid #f39c12; padding: 25px; margin: 25px 0; border-radius: 4px; box-sizing: border-box; }
+        .formula-display { background: white; border: 1px double #3498db; padding: 20px; text-align: center; margin: 15px 0; font-size: 1.2em; }
+        
+        .btn-panel { position: sticky; bottom: 20px; text-align: center; margin-top: 40px; z-index: 100; }
+        .print-btn { background-color: #27ae60; color: white; border: none; padding: 15px 50px; font-size: 1.2em; border-radius: 30px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-weight: bold; }
+
+        @media print {
+            .btn-panel { display: none; }
+            body { padding: 0; background: white; }
+            .paper { box-shadow: none; border: none; padding: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="paper">
+    <h1>Експериментальна робота № 7</h1>
+
+    <div class="student-header">
+        <div class="input-group"><label>Учень/Учениця:</label><input type="text" placeholder="Прізвище та Ім'я"></div>
+        <div class="input-group"><label>Клас:</label><input type="text" placeholder="10-___"></div>
+        <div class="input-group"><label>Дата:</label><input type="text" placeholder="__.03.2026"></div>
+    </div>
+
+    <div class="meta-data">
+        <p><strong>Тема.</strong> Вимірювання вологості повітря.</p>
+        <p><strong>Мета:</strong> виготовити установку для вимірювання відносної вологості повітря і виміряти параметри повітря в кабінеті.</p>
+    </div>
+
+    <h2>Опис методу</h2>
+    <div class="full-width-box">
+        <p>Метод ґрунтується на різниці показів сухого та вологого термометрів. За допомогою Таблиці 1 визначається відносна вологість \(\varphi\). Потім за Таблицею 3 визначається густина насиченої пари \(\rho_{н.п}\) і розраховується абсолютна вологість \(\rho_a\).</p>
+        <div style="text-align: center; font-size: 1.2em;">
+            \(\rho_a = \frac{\varphi \cdot \rho_{н.п}}{100\%}\)
+        </div>
+    </div>
+
+    <h3 class="section-title">Експеримент</h3>
+
+    <div class="full-width-box">
+        <p>1. Поставте склянку з водою під одним термометром.</p>
+        <p>2. Обгорніть резервуар цього термометра шматочком марлі, кінець якої опустіть у воду.</p>
+    </div>
+
+    <h2>Таблиця 2. Результати вимірювань</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>\( t_{cyx}, ^\circ C \)</th>
+                <th>\( t_{вол}, ^\circ C \)</th>
+                <th>\( \Delta t, ^\circ C \) (Обчисліть)</th>
+                <th>\( \varphi, \% \) (Табл. 1)</th>
+                <th>\( \rho_{н.п}, г/м^3 \) (Табл. 3)</th>
+                <th>\( \rho_a, г/м^3 \) (Розрахуйте)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type="number" id="t_dry" step="0.5" oninput="checkDelta()"></td>
+                <td><input type="number" id="t_wet" step="0.5" oninput="checkDelta()"></td>
+                <td><input type="number" id="user_delta" step="0.1" oninput="checkDelta()" placeholder="?"></td>
+                <td><input type="number" id="phi" oninput="updateFormula(); checkAbs()"></td>
+                <td><input type="number" id="rho_s" step="0.1" oninput="updateFormula(); checkAbs()"></td>
+                <td><input type="number" id="user_abs" step="0.1" oninput="checkAbs()" placeholder="?"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="full-width-box" style="border-left: 5px solid #e67e22;">
+        <h3 style="margin-top:0">Опрацювання результатів</h3>
+        <p>1. Визначте \(\varphi\) за психрометричною таблицею (Табл. 1 у підручнику або додатку).</p>
+        <p>2. За Таблицею 3 нижче знайдіть \(\rho_{н.п}\) для вашої температури \(t_{cyx}\).</p>
+    </div>
+
+    <h2>Таблиця 3. Густина насиченої пари</h2>
+    <table>
+        <tr><th>\( t, ^\circ C \)</th><td>14</td><td>16</td><td>18</td><td>20</td><td>22</td><td>24</td><td>26</td><td>28</td><td>30</td></tr>
+        <tr><th>\( \rho_{н.п}, г/м^3 \)</th><td>12.1</td><td>13.6</td><td>15.4</td><td>17.3</td><td>19.4</td><td>21.8</td><td>24.4</td><td>27.2</td><td>30.3</td></tr>
+    </table>
+
+    <div class="calculation-box">
+        <h3>3. Розрахунок абсолютної вологості</h3>
+        <p><small>Округліть до 1 знака після коми</small></p>
+        <div class="formula-display">
+            \( \rho_a = \frac{\varphi \cdot \rho_{н.п}}{100\%} \)
+        </div>
+        <p style="text-align: center; font-size: 1.2em;">
+            \( \rho_a = ( \) <span id="f_phi">___</span> \(\% \cdot \) <span id="f_rho">___</span> \(г/м^3) / 100\% = \) <strong id="f_res">___</strong> \(г/м^3\)
+        </p>
+    </div>
+
+    <h2>Аналіз та висновок</h2>
+    <textarea placeholder="Сформулюйте висновок..."></textarea>
+
+    <h2>Контрольні запитання</h2>
+    <div class="full-width-box" style="border-left: 5px solid #9b59b6;">
+        <p><strong>1. Чи зміниться показ вологого термометра, якщо створити протяг?</strong></p>
+        <textarea placeholder="Ваша відповідь..."></textarea>
+        <p><strong>2. Чому вологий термометр не слід розміщувати впритул до сухого?</strong></p>
+        <textarea placeholder="Ваша відповідь..."></textarea>
+    </div>
+
+    <div class="btn-panel"><button class="print-btn" onclick="window.print()">Зберегти звіт (PDF)</button></div>
+</div>
+
+<script>
+    function updateFormula() {
+        document.getElementById('f_phi').innerText = document.getElementById('phi').value || "___";
+        document.getElementById('f_rho').innerText = document.getElementById('rho_s').value || "___";
+    }
+    function checkDelta() {
+        const t1 = parseFloat(document.getElementById('t_dry').value);
+        const t2 = parseFloat(document.getElementById('t_wet').value);
+        const inp = document.getElementById('user_delta');
+        const val = parseFloat(inp.value);
+        if (!isNaN(t1) && !isNaN(t2) && !isNaN(val)) {
+            const correct = parseFloat((t1 - t2).toFixed(1));
+            inp.className = (Math.abs(val - correct) < 0.01) ? 'correct' : 'wrong';
+        }
+    }
+    function checkAbs() {
+        const phi = parseFloat(document.getElementById('phi').value);
+        const rs = parseFloat(document.getElementById('rho_s').value);
+        const inp = document.getElementById('user_abs');
+        const val = parseFloat(inp.value);
+        if (!isNaN(phi) && !isNaN(rs) && !isNaN(val)) {
+            const correct = parseFloat(((phi * rs) / 100).toFixed(1));
+            document.getElementById('f_res').innerText = val;
+            if (Math.abs(val - correct) < 0.01) {
+                inp.className = 'correct';
+                document.getElementById('f_res').style.color = '#27ae60';
+            } else {
+                inp.className = 'wrong';
+                document.getElementById('f_res').style.color = '#e74c3c';
+            }
+        }
+    }
+</script>
+</body>
+</html>
