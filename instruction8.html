@@ -3,344 +3,357 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Експериментальна робота № 8</title>
+    <title>Лабораторна робота №8 - Поверхневий натяг</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Анімації */
-        .drop-animation {
-            transition: transform 0.4s cubic-bezier(0.5, 0, 1, 1);
+        body { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+        .math-font { font-family: 'Times New Roman', Times, serif; font-style: italic; }
+        
+        @keyframes fall {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(140px) scale(0.6); opacity: 0; }
         }
-        #syringe-plunger {
-            transition: top 0.3s ease-out;
-            z-index: 10;
+        .drop-fall { animation: fall 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+        
+        #plunger { transition: transform 0.2s ease-out; }
+        
+        input[type="number"] { font-size: 16px !important; }
+        
+        .lowercase-symbol {
+            text-transform: none !important;
+            font-variant: normal !important;
         }
+
         .input-field {
             border-bottom: 2px solid #cbd5e1;
             background: transparent;
             text-align: center;
-            width: 60px;
-            font-size: 16px; /* Запобігає зуму на iOS при фокусі */
+            width: 55px;
         }
-        .input-field:focus {
-            outline: none;
-            border-color: #3b82f6;
-        }
-        /* Математичне оформлення */
-        .formula-box {
-            font-family: 'Times New Roman', serif;
-            font-style: italic;
-        }
+
         .fraction {
             display: inline-flex;
             flex-direction: column;
             vertical-align: middle;
             text-align: center;
-            line-height: 1.1;
             margin: 0 4px;
         }
-        .fraction .numerator {
-            border-bottom: 1.5px solid currentColor;
+        .numerator {
+            border-bottom: 1px solid currentColor;
             padding: 0 4px;
         }
-        .fraction .denominator {
+        .denominator {
             padding: 0 4px;
         }
-        .math-symbol {
-            margin: 0 4px;
-            font-style: normal;
-        }
-        /* Стилі шприца (адаптовані) */
+
+        /* Стилізація шприца */
         .syringe-body {
-            width: 36px;
-            height: 140px;
-            border: 2px solid #64748b;
-            border-radius: 0 0 4px 4px;
+            width: 30px;
+            height: 120px;
+            border: 2px solid #94a3b8;
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
             position: relative;
-            background: rgba(248, 250, 252, 0.8);
-        }
-        .plunger-rod {
-            width: 6px;
-            height: 140px;
-            background: #94a3b8;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            top: -135px;
-            border: 1px solid #475569;
-        }
-        .plunger-seal {
-            width: 32px;
-            height: 12px;
-            background: #1e293b;
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
+            background: rgba(241, 245, 249, 0.5);
         }
         .syringe-nozzle {
-            width: 5px;
+            width: 6px;
             height: 15px;
-            background: #64748b;
-            margin: 0 auto;
-        }
-        .beaker {
-            width: 70px;
-            height: 50px;
-            border: 2px solid #94a3b8;
-            border-top: none;
-            border-radius: 0 0 12px 12px;
-            position: relative;
-            background: rgba(255, 255, 255, 0.2);
-            margin-top: 40px;
-        }
-        .water-in-beaker {
+            background: #94a3b8;
             position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(59, 130, 246, 0.4);
-            border-radius: 0 0 10px 10px;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
         }
-        .lowercase-symbol {
-            text-transform: none !important;
-            font-variant: normal !important;
-        }
-        /* Для кращого тач-досвіду */
-        button {
-            touch-action: manipulation;
+        .scale-mark {
+            position: absolute;
+            right: 2px;
+            width: 8px;
+            height: 1px;
+            background: #64748b;
         }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-900 font-sans">
+<body class="bg-slate-100 text-slate-900 min-h-screen pb-12">
 
-    <div class="max-w-4xl mx-auto bg-white shadow-lg min-h-screen flex flex-col">
-        <!-- Header -->
-        <div class="bg-blue-700 p-4 text-white text-center shadow-md">
-            <h1 class="text-lg md:text-xl font-bold uppercase tracking-wider">Експериментальна робота № 8</h1>
-            <p class="text-xs text-blue-100 italic">Вимірювання поверхневого натягу рідини</p>
+    <!-- Header -->
+    <header class="bg-blue-800 text-white p-4 shadow-lg sticky top-0 z-50">
+        <div class="max-w-2xl mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-lg font-bold leading-tight uppercase">Експериментальна робота №8</h1>
+            </div>
+            <div class="text-right">
+                <span class="text-xs bg-blue-700 px-2 py-1 rounded border border-blue-600">Фізика 10 клас</span>
+            </div>
         </div>
+    </header>
 
-        <div class="p-4 space-y-6 flex-grow">
-            <!-- Мета та Обладнання (Компактно) -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                <div class="border-l-4 border-blue-600 bg-blue-50 p-3 rounded-r">
-                    <span class="font-bold text-blue-800">Мета:</span> виміряти поверхневий натяг води методом відриву крапель.
-                </div>
-                <div class="border-l-4 border-blue-600 bg-blue-50 p-3 rounded-r">
-                    <span class="font-bold text-blue-800">Обладнання:</span> шприц (2 мл), штангенциркуль, клин, вода.
-                </div>
+    <main class="max-w-2xl mx-auto p-4 space-y-6 w-full">
+        
+        <!-- Тема, Мета, Обладнання -->
+        <section class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 space-y-3">
+            <p><strong>Тема.</strong> Вимірювання поверхневого натягу рідини.</p>
+            <p><strong>Мета:</strong> виміряти поверхневий натяг води методом відриву крапель.</p>
+            <p><strong>Обладнання:</strong> штангенциркуль, клин вимірювальний, медичний шприц об’ємом 2 мл (см<sup>3</sup>), склянка з дистильованою водою.</p>
+        </section>
+
+        <!-- Опис методу -->
+        <section class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+            <h2 class="text-blue-800 font-bold mb-2 uppercase text-xs tracking-wider">Опис методу вимірювання</h2>
+            <div class="text-sm text-slate-600 leading-relaxed space-y-3">
+                <p>У роботі пропонується виміряти поверхневий натяг води методом відриву крапель. Сутність методу полягає в такому.</p>
+                <p>Під час повільного витікання рідини з тонкої вертикальної трубки на її кінці утворюється крапля. На краплю діють дві сили: сила тяжіння <span class="math-font">F<sub>тяж</sub></span> і сила поверхневого натягу <span class="math-font">F<sub>пов</sub></span>, яка діє уздовж кола шийки краплі (<span class="math-font">l = &pi;d</span>) та перешкоджає її відриву. У той момент, коли сила тяжіння дорівнюватиме за модулем силі поверхневого натягу, крапля відірветься.</p>
+                <p>Таким чином, відрив краплі відбувається за умови: <span class="math-font">F<sub>тяж</sub> = F<sub>пов</sub></span> або <span class="math-font lowercase-symbol">m<sub>0</sub>g = &sigma;&pi;d</span>, де <span class="math-font">m<sub>0</sub></span> — маса краплі, <span class="math-font">&sigma;</span> — поверхневий натяг рідини, <span class="math-font">d</span> — внутрішній діаметр трубки.</p>
+                <p>Масу однієї краплі можна знайти за формулою: 
+                    <span class="math-font italic">m<sub>0</sub> = </span>
+                    <div class="fraction !text-[12px]">
+                        <span class="numerator">V&rho;</span>
+                        <span class="denominator">N</span>
+                    </div>, де <span class="math-font">V</span> — об'єм рідини, <span class="math-font">&rho;</span> — її густина, <span class="math-font">N</span> — кількість крапель.
+                </p>
+            </div>
+        </section>
+
+        <!-- Вказівки -->
+        <section class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 space-y-2">
+            <h2 class="text-blue-800 font-bold mb-2 uppercase text-xs tracking-wider">Вказівки до роботи</h2>
+            <ol class="list-decimal list-inside text-sm text-slate-600 space-y-2">
+                <li>Визначте за допомогою вимірювального клина внутрішній діаметр отвору шприца.</li>
+                <li>Наберіть у шприц воду. Повільно натискаючи на поршень, досягніть того, щоб краплі відривалися одна за одною через однакові проміжки часу.</li>
+                <li>Порахуйте кількість крапель, що містяться в об'ємі 2 мл.</li>
+                <li>Повторіть дослід ще двічі.</li>
+            </ol>
+        </section>
+
+        <!-- Віртуальна установка -->
+        <section class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-slate-50 p-3 border-b border-slate-200 flex justify-between items-center">
+                <span class="text-sm font-bold text-slate-700">🧪 Віртуальна установка</span>
+                <div class="text-xs text-slate-400 font-mono italic">V<sub>max</sub> = 2.0 ml | d = 0.8 mm</div>
             </div>
 
-            <!-- Експеримент (Головний фокус для мобільних) -->
-            <section class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm">
-                <h2 class="text-md font-bold mb-4 flex items-center text-slate-800">
-                    <span class="mr-2">🧪</span> Віртуальна установка
-                </h2>
-                
-                <div class="flex flex-col md:flex-row gap-6 items-center justify-around">
-                    <!-- Візуалізація -->
-                    <div class="bg-white p-4 rounded-xl border shadow-inner flex flex-col items-center w-full max-w-[260px] relative">
-                        <div class="syringe-body">
-                            <div id="syringe-plunger" class="plunger-rod">
-                                <div class="plunger-seal"></div>
-                            </div>
-                            <div id="water-level" class="absolute bottom-0 w-full bg-blue-300/60" style="height: 100%"></div>
+            <div class="p-8 flex flex-col items-center bg-white">
+                <div class="relative w-full flex justify-center h-72">
+                    <!-- Шприц та поршень -->
+                    <div class="absolute top-0 flex flex-col items-center">
+                        <div id="plunger" class="relative w-6 h-32 flex flex-col items-center z-10" style="transform: translateY(0);">
+                            <div class="w-10 h-2 bg-slate-400 rounded-full"></div>
+                            <div class="w-2 h-full bg-slate-300"></div>
+                            <div class="w-6 h-4 bg-slate-700 rounded-sm"></div>
                         </div>
-                        <div class="syringe-nozzle"></div>
                         
-                        <svg id="drop-container" class="absolute left-1/2 -translate-x-1/2 top-[160px]" width="40" height="90">
-                            <path id="active-drop" d="M20 0 Q20 0 20 0" fill="#3b82f6" />
+                        <div class="syringe-body -mt-20 z-20 overflow-hidden">
+                            <div id="water-in-syringe" class="absolute bottom-0 w-full bg-blue-400/60 transition-all duration-300" style="height: 100%;"></div>
+                            <div class="scale-mark" style="top: 20px;"></div>
+                            <div class="scale-mark" style="top: 40px;"></div>
+                            <div class="scale-mark" style="top: 60px;"></div>
+                            <div class="scale-mark" style="top: 80px;"></div>
+                            <div class="scale-mark" style="top: 100px;"></div>
+                        </div>
+                        <div class="syringe-nozzle z-20"></div>
+                    </div>
+
+                    <!-- Крапля -->
+                    <div id="drop-zone" class="absolute top-[138px] left-1/2 -translate-x-1/2 w-6 h-6 flex justify-center z-30">
+                        <svg id="drop-svg" viewBox="0 0 100 100" class="w-4 h-5 text-blue-500 fill-current opacity-0">
+                            <path d="M50 0 C50 0 20 40 20 70 A30 30 0 0 0 80 70 C80 40 50 0 50 0 Z" />
                         </svg>
+                    </div>
 
-                        <div class="beaker">
-                            <div id="beaker-water" class="water-in-beaker" style="height: 0%"></div>
+                    <!-- Склянка -->
+                    <div class="absolute bottom-4 left-1/2 -translate-x-1/2 w-28 h-20 border-x-4 border-b-4 border-slate-200 rounded-b-3xl bg-white/40 z-0">
+                        <div id="beaker-water" class="absolute bottom-0 w-full bg-blue-500/20 rounded-b-2xl transition-all duration-500" style="height: 0%;"></div>
+                    </div>
+                </div>
+
+                <div class="w-full max-w-sm grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                    <div class="bg-slate-100 rounded-xl p-3 text-center border border-slate-200">
+                        <div class="text-[10px] uppercase text-slate-500 font-bold mb-1">Крапель (N)</div>
+                        <div id="count-display" class="text-2xl font-black text-blue-800">0</div>
+                    </div>
+                    <!-- НОВИЙ ЛІЧИЛЬНИК ОБ'ЄМУ -->
+                    <div class="bg-blue-50 rounded-xl p-3 text-center border border-blue-200">
+                        <div class="text-[10px] uppercase text-blue-500 font-bold mb-1">Витекло (V), мл</div>
+                        <div id="volume-display" class="text-2xl font-black text-blue-600">0.00</div>
+                    </div>
+                    <button id="tap-btn" class="bg-blue-600 active:bg-blue-800 active:scale-95 transition-all text-white rounded-xl font-bold text-lg shadow-lg py-2 select-none">НАТИСНУТИ</button>
+                </div>
+                <button id="reset-btn" class="mt-4 text-slate-400 text-[10px] uppercase tracking-widest hover:text-red-500">Скинути дослід</button>
+            </div>
+        </section>
+
+        <!-- Таблиця -->
+        <section class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="p-3 bg-slate-50 border-b border-slate-200">
+                <h2 class="text-sm font-bold text-slate-700 italic">Таблиця результатів</h2>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-center text-xs border-collapse">
+                    <thead>
+                        <tr class="bg-slate-100 border-b border-slate-200 text-slate-500 font-bold">
+                            <th class="p-2 border-r uppercase">№</th>
+                            <th class="p-2 border-r lowercase-symbol italic">d, 10<sup>-3</sup> м</th>
+                            <th class="p-2 border-r lowercase-symbol italic">V, 10<sup>-6</sup> м³</th>
+                            <th class="p-2 border-r uppercase">N</th>
+                            <th class="p-2 border-r lowercase-symbol italic">N<sub>сер</sub></th>
+                            <th class="p-2 lowercase-symbol italic">&sigma;<sub>сер</sub>, мН/м</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b border-slate-100">
+                            <td class="p-2 border-r font-bold">1</td>
+                            <td class="p-2 border-r" rowspan="3">0.8</td>
+                            <td class="p-2 border-r" rowspan="3">2.0</td>
+                            <td class="p-2 border-r"><input type="number" id="val-n1" class="input-field" placeholder="0"></td>
+                            <td class="p-2 border-r font-bold text-slate-700" id="res-navg" rowspan="3">-</td>
+                            <td class="p-2 font-bold text-blue-700" id="res-sigma" rowspan="3">-</td>
+                        </tr>
+                        <tr class="border-b border-slate-100">
+                            <td class="p-2 border-r font-bold">2</td>
+                            <td class="p-2 border-r"><input type="number" id="val-n2" class="input-field" placeholder="0"></td>
+                        </tr>
+                        <tr>
+                            <td class="p-2 border-r font-bold">3</td>
+                            <td class="p-2 border-r"><input type="number" id="val-n3" class="input-field" placeholder="0"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="p-4 bg-slate-50 border-t border-slate-200 text-center">
+                <button id="calc-btn" class="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl shadow-md uppercase text-sm">Обчислити результати</button>
+            </div>
+        </section>
+
+        <!-- Опрацювання -->
+        <section class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 space-y-4">
+            <h2 class="text-blue-800 font-bold uppercase text-xs tracking-wider">Опрацювання результатів експерименту</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-6 text-sm math-font lowercase-symbol text-slate-700">
+                    <div class="flex items-center">
+                        <span class="mr-1">1. N<sub>сер</sub> =</span>
+                        <div class="fraction">
+                            <span class="numerator">N<sub>1</sub> + N<sub>2</sub> + N<sub>3</sub></span>
+                            <span class="denominator">3</span>
                         </div>
                     </div>
-
-                    <!-- Керування -->
-                    <div class="w-full md:w-1/2 space-y-4">
-                        <div class="grid grid-cols-2 gap-3">
-                            <div class="bg-white p-3 rounded-lg border text-center shadow-sm">
-                                <p class="text-[10px] text-gray-500 font-bold uppercase">Крапель (N)</p>
-                                <p id="counter" class="text-4xl font-black text-blue-600">0</p>
-                            </div>
-                            <div class="bg-white p-3 rounded-lg border text-center shadow-sm">
-                                <p class="text-[10px] text-gray-500 font-bold uppercase">Об'єм (V)</p>
-                                <p id="volume-left" class="text-4xl font-black text-slate-700">2.00</p>
-                            </div>
+                    <div class="flex items-center">
+                        <span class="mr-1">2. &sigma;<sub>сер</sub> =</span>
+                        <div class="fraction">
+                            <span class="numerator">V&rho;g</span>
+                            <span class="denominator">N<sub>сер</sub>&pi;d</span>
                         </div>
-                        
-                        <button id="press-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-5 rounded-2xl shadow-lg active:bg-blue-800 transition-all text-lg">
-                            НАТИСНУТИ
-                        </button>
-                        
-                        <button id="reset-exp" class="w-full py-2 text-xs text-gray-400 font-medium uppercase tracking-widest">Очистити шприц</button>
                     </div>
                 </div>
-            </section>
 
-            <!-- ТАБЛИЦЯ (Адаптивна) -->
-            <section>
-                <h2 class="text-md font-bold mb-3 text-gray-800">Результати (таблиця)</h2>
-                <div class="overflow-x-auto -mx-4 px-4">
-                    <div class="inline-block min-w-full align-middle border border-gray-300 rounded-lg overflow-hidden shadow-sm">
-                        <table class="min-w-full text-center bg-white border-collapse">
-                            <thead class="bg-slate-100 text-gray-700 text-[10px] font-bold border-b">
-                                <tr>
-                                    <th class="p-2 border-r uppercase">№</th>
-                                    <th class="p-2 border-r lowercase-symbol italic">d, &times;10<sup>-3</sup> м</th>
-                                    <th class="p-2 border-r lowercase-symbol italic">V, &times;10<sup>-6</sup> м<sup>3</sup></th>
-                                    <th class="p-2 border-r uppercase">N</th>
-                                    <th class="p-2 border-r lowercase-symbol italic">N<sub>сер</sub></th>
-                                    <th class="p-2 lowercase-symbol italic">&sigma;<sub>сер</sub></th>
-                                </tr>
-                            </thead>
-                            <tbody class="text-xs">
-                                <tr class="border-b">
-                                    <td class="p-2 border-r font-bold">1</td>
-                                    <td class="p-2 border-r" rowspan="3">0.8</td>
-                                    <td class="p-2 border-r" rowspan="3">2.0</td>
-                                    <td class="p-2 border-r"><input type="number" id="n1" inputmode="decimal" class="input-field" placeholder="0"></td>
-                                    <td class="p-2 border-r font-bold" rowspan="3"><span id="n_avg_cell">-</span></td>
-                                    <td class="p-2 font-bold text-blue-700" rowspan="3"><span id="sigma_res_cell">-</span></td>
-                                </tr>
-                                <tr class="border-b">
-                                    <td class="p-2 border-r font-bold">2</td>
-                                    <td class="p-2 border-r"><input type="number" id="n2" inputmode="decimal" class="input-field" placeholder="0"></td>
-                                </tr>
-                                <tr>
-                                    <td class="p-2 border-r font-bold">3</td>
-                                    <td class="p-2 border-r"><input type="number" id="n3" inputmode="decimal" class="input-field" placeholder="0"></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-100 flex flex-col justify-center">
+                    <h3 class="text-[10px] font-bold text-indigo-800 uppercase mb-2">3. Відносна похибка</h3>
+                    <div id="error-box" class="text-3xl font-black text-indigo-700 mb-2">-- %</div>
+                    <div class="flex items-center text-[10px] text-indigo-400 font-bold italic lowercase-symbol">
+                        <span>&epsilon; = | 1 - </span>
+                        <div class="fraction !mx-0">
+                            <span class="numerator !border-indigo-300">&sigma;<sub>сер</sub></span>
+                            <span class="denominator">&sigma;<sub>табл</sub></span>
+                        </div>
+                        <span> | &middot; 100%</span>
                     </div>
                 </div>
-                <button id="calc-btn" class="w-full mt-4 bg-emerald-600 text-white py-3 rounded-xl font-bold shadow-md">ОБЧИСЛИТИ</button>
-            </section>
+            </div>
+        </section>
 
-            <!-- Опрацювання -->
-            <section class="bg-blue-50/50 p-4 rounded-xl border border-blue-100 text-sm">
-                <h2 class="font-bold mb-3 border-b border-blue-200 pb-1">Опрацювання</h2>
-                <div class="space-y-4">
-                    <div class="flex items-center gap-2">
-                        <span class="text-gray-600">1. N<sub>сер</sub> =</span>
-                        <span id="n_avg_formula" class="text-blue-700 font-bold font-serif italic text-lg">...</span>
-                    </div>
-
-                    <div class="flex items-center gap-2">
-                        <span class="text-gray-600">2. &sigma;<sub>сер</sub> =</span>
-                        <span id="sigma_calc_formula" class="text-blue-700 font-bold font-serif italic text-lg">...</span>
-                        <span class="text-xs text-gray-500 not-italic font-sans">Н/м</span>
-                    </div>
-
-                    <div class="p-3 bg-white rounded-lg border border-blue-200 flex justify-between items-center">
-                        <span class="font-bold text-blue-900">3. Похибка &epsilon;:</span>
-                        <span id="error_disp" class="text-xl font-black text-blue-700">... %</span>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Висновок -->
-            <section class="pb-8">
-                <h2 class="text-md font-bold mb-2">Висновок</h2>
-                <textarea id="conclusion" class="w-full h-32 p-3 border rounded-xl focus:ring-2 focus:ring-blue-400 outline-none text-sm bg-slate-50" placeholder="Напишіть висновок..."></textarea>
-            </section>
-        </div>
-    </div>
+        <!-- Висновок -->
+        <section class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+            <h2 class="text-sm font-bold text-slate-700 mb-3 uppercase tracking-tighter">Аналіз експерименту і його результатів</h2>
+            <div class="text-[11px] text-slate-500 mb-4 space-y-1">
+                <p>Проаналізуйте експеримент і його результати. Сформулюйте висновок, у якому зазначте:</p>
+                <ol class="list-decimal list-inside ml-2">
+                    <li>яку величину ви вимірювали;</li>
+                    <li>яким методом;</li>
+                    <li>чи залежить результат від умов досліду (температури, чистоти води);</li>
+                    <li>причини похибки та як їх зменшити.</li>
+                </ol>
+            </div>
+            <textarea class="w-full h-40 p-3 text-sm bg-slate-50 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-blue-400" placeholder="Сформулюйте висновок тут..."></textarea>
+        </section>
+    </main>
 
     <script>
-        let dropCount = 0;
-        let volumeLeft = 2.0;
-        let dropProgress = 0;
+        let count = 0;
+        let progress = 0;
         let isAnimating = false;
+        const totalPossibleDrops = 108; 
+        const maxVolume = 2.0;
 
-        const elements = {
-            pressBtn: document.getElementById('press-btn'),
-            resetExp: document.getElementById('reset-exp'),
-            counter: document.getElementById('counter'),
-            volumeLeft: document.getElementById('volume-left'),
-            plunger: document.getElementById('syringe-plunger'),
-            waterLevel: document.getElementById('water-level'),
-            beakerWater: document.getElementById('beaker-water'),
-            dropPath: document.getElementById('active-drop'),
-            nInputs: [document.getElementById('n1'), document.getElementById('n2'), document.getElementById('n3')],
-            calcBtn: document.getElementById('calc-btn'),
-            nAvgCell: document.getElementById('n_avg_cell'),
-            sigmaCell: document.getElementById('sigma_res_cell'),
-            nAvgForm: document.getElementById('n_avg_formula'),
-            sigmaForm: document.getElementById('sigma_calc_formula'),
-            errorDisp: document.getElementById('error_disp')
-        };
+        const btnTap = document.getElementById('tap-btn');
+        const btnReset = document.getElementById('reset-btn');
+        const displayCount = document.getElementById('count-display');
+        const displayVolume = document.getElementById('volume-display');
+        const syringeWater = document.getElementById('water-in-syringe');
+        const beakerWater = document.getElementById('beaker-water');
+        const plunger = document.getElementById('plunger');
+        const dropSvg = document.getElementById('drop-svg');
 
-        function updateDropShape(progress) {
-            const width = 4 + progress * 14;
-            const height = progress * 28;
-            const cx = 20;
-            elements.dropPath.setAttribute('d', `M ${cx-width/2} 0 Q ${cx-width/2} ${height} ${cx} ${height} Q ${cx+width/2} ${height} ${cx+width/2} 0 Z`);
+        btnTap.addEventListener('click', () => {
+            if (isAnimating || count >= totalPossibleDrops) return;
+            progress += 20; 
+            if (progress >= 100) {
+                spawnDrop();
+                progress = 0;
+            } else {
+                dropSvg.style.opacity = progress / 100;
+                dropSvg.style.transform = `scale(${0.4 + (progress/100)*0.6})`;
+            }
+        });
+
+        function spawnDrop() {
+            isAnimating = true;
+            count++;
+            dropSvg.classList.add('drop-fall');
+            dropSvg.style.opacity = "1";
+            
+            setTimeout(() => {
+                displayCount.innerText = count;
+                const perc = (count / totalPossibleDrops) * 100;
+                
+                // Розрахунок витеклого об'єму
+                const currentV = (count / totalPossibleDrops) * maxVolume;
+                displayVolume.innerText = currentV.toFixed(2);
+                
+                // Оновлення води та поршня
+                syringeWater.style.height = (100 - perc) + "%";
+                plunger.style.transform = `translateY(${perc * 0.9}px)`; 
+                beakerWater.style.height = Math.min(95, perc) + "%";
+                
+                dropSvg.classList.remove('drop-fall');
+                dropSvg.style.opacity = "0";
+                isAnimating = false;
+            }, 400);
         }
 
-        elements.pressBtn.addEventListener('click', (e) => {
-            e.preventDefault(); // Запобігає зуму на мобільних
-            if (volumeLeft <= 0.04 || isAnimating) return;
-            
-            dropProgress += 0.35;
-            const plungerOffset = -135 + ((2.0 - volumeLeft) / 2.0) * 135;
-            elements.plunger.style.top = `${plungerOffset}px`;
-
-            if (dropProgress >= 1) {
-                isAnimating = true;
-                elements.dropPath.classList.add('drop-animation');
-                elements.dropPath.style.transform = 'translateY(100px) scale(0.5)';
-                
-                setTimeout(() => {
-                    dropCount++;
-                    volumeLeft -= 0.04;
-                    elements.counter.innerText = dropCount;
-                    elements.volumeLeft.innerText = Math.max(0, volumeLeft).toFixed(2);
-                    elements.waterLevel.style.height = `${(volumeLeft / 2) * 100}%`;
-                    elements.beakerWater.style.height = `${Math.min(95, (dropCount / 50) * 100)}%`;
-                    
-                    elements.dropPath.classList.remove('drop-animation');
-                    elements.dropPath.style.transform = 'translateY(0) scale(1)';
-                    dropProgress = 0;
-                    updateDropShape(0);
-                    isAnimating = false;
-                }, 400);
-            } else {
-                updateDropShape(dropProgress);
-            }
+        btnReset.addEventListener('click', () => {
+            count = 0; progress = 0;
+            displayCount.innerText = "0";
+            displayVolume.innerText = "0.00";
+            syringeWater.style.height = "100%";
+            beakerWater.style.height = "0%";
+            plunger.style.transform = "translateY(0)";
+            dropSvg.style.opacity = "0";
         });
 
-        elements.resetExp.addEventListener('click', () => {
-            dropCount = 0; volumeLeft = 2.0; dropProgress = 0;
-            elements.counter.innerText = '0';
-            elements.volumeLeft.innerText = '2.00';
-            elements.waterLevel.style.height = '100%';
-            elements.beakerWater.style.height = '0%';
-            updateDropShape(0);
-            elements.plunger.style.top = '-135px';
-        });
-
-        elements.calcBtn.addEventListener('click', () => {
-            const values = elements.nInputs.map(i => parseFloat(i.value));
-            if (values.some(isNaN) || values.some(v => v <= 0)) {
-                alert("Будь ласка, введіть значення N для всіх 3 дослідів.");
+        document.getElementById('calc-btn').addEventListener('click', () => {
+            const n1 = parseFloat(document.getElementById('val-n1').value);
+            const n2 = parseFloat(document.getElementById('val-n2').value);
+            const n3 = parseFloat(document.getElementById('val-n3').value);
+            if (isNaN(n1) || isNaN(n2) || isNaN(n3)) {
+                alert("Введіть кількість крапель (N) для всіх дослідів.");
                 return;
             }
-
-            const nAvg = (values[0] + values[1] + values[2]) / 3;
-            const V = 2.0e-6; const rho = 1000; const g = 9.81; const d = 0.8e-3;
-            
-            const sigma = (V * rho * g) / (nAvg * Math.PI * d);
-            const sigmaTabl = 0.0728;
-            const error = Math.abs(1 - (sigma / sigmaTabl)) * 100;
-
-            elements.nAvgCell.innerText = nAvg.toFixed(1);
-            elements.sigmaCell.innerText = (sigma * 1000).toFixed(1);
-            elements.nAvgForm.innerText = nAvg.toFixed(1);
-            elements.sigmaForm.innerText = sigma.toFixed(5);
-            elements.errorDisp.innerText = error.toFixed(1) + " %";
+            const nAvg = (n1 + n2 + n3) / 3;
+            const V = 2.0e-6, rho = 1000, g = 9.81, d = 0.8e-3, sigmaTable = 0.0728;
+            const sigmaExp = (V * rho * g) / (nAvg * Math.PI * d);
+            const error = Math.abs(1 - (sigmaExp / sigmaTable)) * 100;
+            document.getElementById('res-navg').innerText = nAvg.toFixed(1);
+            document.getElementById('res-sigma').innerText = (sigmaExp * 1000).toFixed(1);
+            document.getElementById('error-box').innerText = error.toFixed(1) + " %";
         });
     </script>
 </body>
